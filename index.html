@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora do Vidraceiro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 420px;
+  margin: auto;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: #007bff;
+  color: white;
+  border: none;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.result {
+  margin-top: 20px;
+  background: #eef3ff;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.footer {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Calculadora do Vidraceiro</h2>
+  <div class="subtitle">Ferramenta gratuita • by Igor Vidraceiro</div>
+
+  <label>Largura (m)</label>
+  <input type="number" id="largura" step="0.01">
+
+  <label>Altura (m)</label>
+  <input type="number" id="altura" step="0.01">
+
+  <label>Quantidade</label>
+  <input type="number" id="qtd" value="1">
+
+  <label>Preço do vidro (R$/m²)</label>
+  <input type="number" id="preco">
+
+  <label>Margem de lucro (%)</label>
+  <input type="number" id="margem" value="30">
+
+  <button onclick="calcular()">Calcular Orçamento</button>
+
+  <div id="resultado" class="result" style="display:none;"></div>
+
+  <div class="footer">
+    Cálculo estimado • Confirme ferragens e condições da obra<br>
+    © Igor Vidraceiro
+  </div>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+
+function calcular() {
+  let l = +largura.value;
+  let a = +altura.value;
+  let q = +qtd.value;
+  let p = +preco.value;
+  let m = +margem.value;
+
+  if (!l || !a || !p) {
+    alert("Preencha todos os campos");
+    return;
+  }
+
+  let area = l * a * q;
+  let areaFinal = area * 1.10;
+  let custo = areaFinal * p;
+  let lucro = custo * (m / 100);
+  let total = custo + lucro;
+
+  resultado.style.display = "block";
+  resultado.innerHTML = `
+    Área com perda: <b>${areaFinal.toFixed(2)} m²</b><br>
+    Custo: <b>R$ ${custo.toFixed(2)}</b><br>
+    Lucro: <b>R$ ${lucro.toFixed(2)}</b><br><br>
+    <b>Valor sugerido: R$ ${total.toFixed(2)}</b>
+  `;
+}
+</script>
+
+</body>
+</html>
